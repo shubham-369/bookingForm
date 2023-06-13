@@ -1,7 +1,7 @@
 *{
-    margin: 0;
+    margin: 0; 
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box!important;
     text-decoration: none;
     font-family: 'Times New Roman', Times, serif;
 }
@@ -31,15 +31,20 @@ ul li{
     font-family: Arial, Helvetica, sans-serif;
     font-weight: 300;
 }
+
+#user-data ul li{
+    list-style-type: circle;
+    color: white;
+}
 form{
     height: auto;
     width: 45vw;
     background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 2vh;
+    border-radius: 1vh;
     margin: 1rem auto;
     padding: 2rem 1rem 1rem 1rem;
     position: relative;
-    box-shadow: 0 0 9px 3px white;
+    box-shadow: 0 0 9px 3px rgb(46, 71, 255);
 }
 @media(max-width:600px){
     form{
@@ -83,8 +88,13 @@ form div{
     width: 100%;
     font-family: Arial, Helvetica, sans-serif;
 }
-input+h5{
+input + h6{
     color: red;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    border: none;
+    display: none;
 }
 #submitted{
     display: none;
