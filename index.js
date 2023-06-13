@@ -31,7 +31,7 @@ email.addEventListener("input",function(){
     }
 });
 const form = document.getElementById("Form")
-document.getElementById("Form").addEventListener("submit", function(event) {
+form.addEventListener("submit", function(event) {
     event.preventDefault();
 
 var phone = document.getElementById('phone').value;
@@ -53,17 +53,31 @@ const updatedDataString = JSON.stringify(newUser);
 // Store the updated string in local storage
 localStorage.setItem(newUser.email, updatedDataString);
 
+const div = document.getElementById("user-data");
+div.querySelector('ul').innerHTML="";
+for(let i=0; i<localStorage.length; i++){
+    let key = localStorage.key(i);
+    let value = localStorage.getItem(key);
+    let obj = JSON.parse(value);
+    let li = document.createElement("li");
+    li.innerHTML = `${obj.name} ${obj.phone} ${obj.email} ${obj.date} ${obj.time} <button class='delete' data-email="${obj.email}">Delete</button>&nbsp;<button class='edit' data-email="${obj.email}">Edit</button><br><br>`;
+    div.querySelector('ul').appendChild(li);
+}
+
 
 form.reset();
+});
 
-let i = localStorage.length-1;
 const div = document.getElementById("user-data");
-let key = localStorage.key(i);
-let value = localStorage.getItem(key);
-let obj = JSON.parse(value);
-let li = document.createElement("li");
-li.innerHTML = `${obj.name} ${obj.phone} ${obj.email} ${obj.date} ${obj.time} <button class='delete' data-email="${obj.email}">Delete</button><br><br>`;
-div.querySelector('ul').appendChild(li);
+
+for(let i=0; i<localStorage.length; i++){
+    let key = localStorage.key(i);
+    let value = localStorage.getItem(key);
+    let obj = JSON.parse(value);
+    let li = document.createElement("li");
+    li.innerHTML = `${obj.name} ${obj.phone} ${obj.email} ${obj.date} ${obj.time} <button class='delete' data-email="${obj.email}">Delete</button>&nbsp;<button class='edit' data-email="${obj.email}">Edit</button><br><br>`;
+    div.querySelector('ul').appendChild(li);
+}
 
 
 let del = document.getElementById('user-data').querySelector('ul');
@@ -74,5 +88,18 @@ del.addEventListener('click',(e)=>{
         localStorage.removeItem(key);        
     }
 });
-
+let edit = document.getElementById('user-data').querySelector('ul');
+del.addEventListener('click',(e)=>{
+    if(e.target.classList.contains('edit')){
+        let key = e.target.getAttribute('data-email');
+        let l_key = localStorage.getItem(key);
+        let obj = JSON.parse(l_key);
+        u_name.value = obj.name;
+        phone.value = obj.phone;
+        email.value = obj.email;
+        date.value = obj.date;
+        time.value = obj.time;
+        e.target.parentElement.remove();
+        localStorage.removeItem(key);        
+    }
 });
