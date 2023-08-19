@@ -1,22 +1,37 @@
 const appointment = require('../models/appointment');
 
-exports.submit = (req, res) => {
-    const {name, email, phone} = req.body;
-    appointment.create({
-        name: name,
-        email: email,
-        phone: phone
-    })
-    .then(() => {
-        res.redirect('/');
-    })
-    .catch((error) => {
-        console.log(`error while inserting data : ${error}`);
-        res.status(500).json({error:'Internal server error'});
-    })
+exports.submit = (req, res, next) => {
+    const {id, name, email, phone} = req.body;
+    if(id){
+        appointment.findByPk(id)
+        .then((data) => {
+            data.name = name;
+            data.email = email;
+            data.phone = phone;
+            data.save();
+        })
+        .then(() => res.redirect('/form.html'))
+        .catch((error) => {
+            console.log(`error while inserting data by id : ${error}`);
+            res.status(500).json({error:'Internal server error'});
+        })
+    }else{
+        appointment.create({
+            name: name,
+            email: email,
+            phone: phone
+        })
+        .then(() => {
+            res.redirect('/form.html');
+        })
+        .catch((error) => {
+            console.log(`error while inserting data : ${error}`);
+            res.status(500).json({error:'Internal server error'});
+        })
+    }
 }
 
-exports.fetchData = (req, res) => {
+exports.fetchData = (req, res, next) => {
     appointment.findAll()
     .then((data) => {
         res.json(data);
@@ -27,25 +42,14 @@ exports.fetchData = (req, res) => {
     })
 }
 
-exports.delete = (req, res) => {
+exports.delete = (req, res, next) => {
     const id = req.params.deleteID;
     appointment.destroy({where: {id:id}})
         .then(() => {
-            res.redirect('/index.html');
+            res.redirect('/form.html');
         })
         .catch((error) => {
             console.log('error while deleting data : ', error);
             res.status(500).json({error:'Internal server error'});
         })
-}
-exports.edit = (req, res) => {
-    const id = req.params.editID;
-    appointment.findByPk(id)
-    .then((data) => {
-        res.redirect('/index.html');
-    })
-    .catch((error) => {
-        console.log('error while updating data : ', error);
-        res.status(500).json({error:'Internal server error'});
-    })
 }
