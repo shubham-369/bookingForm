@@ -1,4 +1,3 @@
-const { error } = require('console');
 const appointment = require('../models/appointment');
 
 exports.submit = (req, res) => {
